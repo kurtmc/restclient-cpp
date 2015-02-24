@@ -33,10 +33,13 @@ void RestClient::setAuth(const std::string& user,const std::string& password){
  *
  * @return response struct
  */
-RestClient::response RestClient::get(const std::string& url)
+RestClient::response RestClient::get(const std::string& url,
+				     const std::string& accept)
 {
   /** create return struct */
   RestClient::response ret = {};
+  /** build accept header string */
+  std::string accept_header = "Accept: " + accept;
 
   // use libcurl
   CURL *curl = NULL;
@@ -62,6 +65,10 @@ RestClient::response RestClient::get(const std::string& url)
     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, RestClient::header_callback);
     /** callback object for headers */
     curl_easy_setopt(curl, CURLOPT_HEADERDATA, &ret);
+    /** set content-type header */
+    curl_slist* header = NULL;
+    header = curl_slist_append(header, accept_header.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, header);
     /** perform the actual query */
     res = curl_easy_perform(curl);
     if (res != CURLE_OK)

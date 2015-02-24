@@ -43,7 +43,7 @@ class RestClient
     static void clearAuth();
     static void setAuth(const std::string& user,const std::string& password);
     // HTTP GET
-    static response get(const std::string& url);
+    static response get(const std::string& url, const std::string& accept);
     // HTTP POST
     static response post(const std::string& url, const std::string& ctype,
                          const std::string& data);
